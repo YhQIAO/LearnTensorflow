@@ -1,0 +1,31 @@
+import tensorflow as tf
+
+X = tf.constant([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])
+y = tf.constant([[10.0], [20.0]])
+
+
+class Linear(tf.keras.Model):
+    def __init__(self):
+        super().__init__()
+        self.dense = tf.keras.layers.Dense(
+            units=1,
+            activation=None,
+            kernel_initializer=tf.zeros_initializer(),
+            bias_initializer=tf.zeros_initializer()
+        )
+
+    def call(self, input):
+        out = self.dense(input)
+        return out
+
+
+model = Linear()
+optimizer = tf.keras.optimizers.SGD(learning_rate=0.01)
+for i in range(100):
+    with tf.GradientTape() as tape:
+        y_pred = model(X)
+        loss = tf.reduce_mean(tf.square(y_pred - y))
+    grades = tape.gradient(loss, model.variables)
+    optimizer.apply_gradients(grads_and_vars=zip(grades, model.variables))
+
+print(model.variables)
