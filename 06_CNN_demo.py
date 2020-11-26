@@ -2,6 +2,13 @@ import tensorflow as tf
 import numpy as np
 
 
+# 获取所有GPU组成list
+gpus = tf.config.experimental.list_physical_devices('GPU')
+# 设置按需申请
+# 由于我这里仅有一块GPU,multi-GPU需要for一下ss
+tf.config.experimental.set_memory_growth(gpu[0], True)
+
+
 class MNISTLoader():
     def __init__(self):
         mnist = tf.keras.datasets.mnist
