@@ -1,5 +1,13 @@
 import tensorflow as tf
 import numpy as np
+import time
+
+time_start=time.time()
+# 获取所有GPU组成list
+gpus = tf.config.experimental.list_physical_devices('GPU')
+# 设置按需申请s
+# 由于我这里仅有一块GPU,multi-GPU需要for一下ss
+tf.config.experimental.set_memory_growth(gpus[0], True)
 
 
 class MNISTLoader():
@@ -84,3 +92,6 @@ for batch_index in range(num_batches):
     y_pred = model.predict(data_loader.test_data[start_index: end_index])
     sparse_categorical_accuracy.update_state(y_true=data_loader.test_label[start_index: end_index], y_pred=y_pred)
 print("test accuracy: %f" % sparse_categorical_accuracy.result())
+
+time_end=time.time()
+print('totally cost',time_end-time_start)
